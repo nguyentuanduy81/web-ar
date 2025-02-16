@@ -13,7 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const video = document.createElement('video');
         video.src = './assets/videos/demo-video.mp4'; // Cập nhật đường dẫn tới video demo-video.mp4
         video.loop = true; // Bật loop để video tự động lặp lại
-        video.muted = false; // Tắt mute để có âm thanh
+        video.muted = true; // Tắt mute để có âm thanh
+        video.setAttribute('playsinline', true);
         video.style.display = 'none'; // Ẩn video khỏi DOM
 
         // Thêm video vào document.body để đảm bảo khả năng phát
