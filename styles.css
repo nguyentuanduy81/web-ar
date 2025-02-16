@@ -1,0 +1,28 @@
+/* styles.css */
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Loại bỏ thanh cuộn */
+    width: 100%;
+    height: 100%;
+}
+
+/* Styling cho nút bắt đầu */
+.start-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.start-button:hover {
+    background-color: #0056b3;
+}
