@@ -1,61 +1,70 @@
 const THREE = window.MINDAR.IMAGE.THREE;
 
 document.addEventListener('DOMContentLoaded', () => {
-    const start = async () => {
+    console.log('version 1.1!');
+
+    const startMindAR = async () => {
+        // Khởi tạo MindAR
         const mindarThree = new window.MINDAR.IMAGE.MindARThree({
             container: document.body,
-            imageTargetSrc: './assets/targets/targets.mind' // Cập nhật đường dẫn tới file targets.mind
+            imageTargetSrc: './assets/targets/targets.mind',
         });
 
         const { renderer, scene, camera } = mindarThree;
 
-        // Tạo phần tử video
+        // Khởi tạo video và texture
         const video = document.createElement('video');
-        video.src = './assets/videos/demo-video.mp4'; // Cập nhật đường dẫn tới video demo-video.mp4
-        video.loop = true; // Bật loop để video tự động lặp lại
-        video.muted = true; // Tắt mute để có âm thanh
-        video.setAttribute('playsinline', true);
-        video.style.display = 'none'; // Ẩn video khỏi DOM
-
-        // Thêm video vào document.body để đảm bảo khả năng phát
+        video.src = './assets/videos/demo-video.mp4';
+        video.loop = true;
+        video.muted = true; // Bắt buộc để trình duyệt cho phép tự động phát
+        video.setAttribute('playsinline', true); // Cho phép phát video trong trình duyệt
+        video.style.display = 'none';
         document.body.appendChild(video);
 
-        // Tạo video texture
         const videoTexture = new THREE.VideoTexture(video);
-
-        // Tạo PlaneGeometry để hiển thị video
-        const geometry = new THREE.PlaneGeometry(1, 1); // Kích thước video
-        const material = new THREE.MeshBasicMaterial({
-            map: videoTexture
-        });
+        const geometry = new THREE.PlaneGeometry(1, 1);
+        const material = new THREE.MeshBasicMaterial({ map: videoTexture });
         const plane = new THREE.Mesh(geometry, material);
 
-        // Gắn Plane vào anchor
         const anchor = mindarThree.addAnchor(0);
         anchor.group.add(plane);
 
-        // Xử lý sự kiện khi phát hiện hoặc mất mục tiêu
-        anchor.onTargetFound = () => {
+        // Xử lý sự kiện khi phát hiện target
+        anchor.onTargetFound = async () => {
             console.log('Target found!');
-            if (video.paused) {
-                video.play(); // Tiếp tục phát video từ vị trí hiện tại
+            try {
+                await video.play();
+            } catch (error) {
+                console.error('Video play failed:', error);
+                alert('Không thể phát video. Vui lòng thử lại!');
             }
         };
 
+        // Xử lý sự kiện khi mất target
         anchor.onTargetLost = () => {
             console.log('Target lost!');
-            if (!video.paused) {
-                video.pause(); // Tạm dừng video nếu đang phát
-            }
+            video.pause();
         };
 
+        // Khởi động MindAR
+        console.log('Starting MindAR...');
         await mindarThree.start();
+        console.log('MindAR started!');
 
-        // Vòng lặp render
         renderer.setAnimationLoop(() => {
             renderer.render(scene, camera);
         });
     };
 
-    start();
+    // Xử lý nút bắt đầu
+    const startButton = document.getElementById('start-button');
+    startButton.addEventListener('click', async () => {
+        startButton.style.display = 'none'; // Ẩn nút sau khi nhấn
+        try {
+            await startMindAR(); // Khởi động MindAR
+        } catch (error) {
+            console.error('MindAR failed to start:', error);
+            alert('Đã xảy ra lỗi khi khởi động. Vui lòng tải lại trang và thử lại!');
+        }
+    });
 });
