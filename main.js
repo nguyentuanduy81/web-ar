@@ -7,9 +7,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const contentId = params.get('id') || 'demo';
 
     // 🔹 Sử dụng tài nguyên từ S3
-    const S3_BUCKET_URL = "https://nguyentuanduy81-webarassets.s3.ap-southeast-1.amazonaws.com";
-    const imageTargetSrc = `${S3_BUCKET_URL}/targets/${contentId}.mind`;
-    const videoSrc = `${S3_BUCKET_URL}/videos/${contentId}.mp4`;
+    const CLOUD_FRONT_URL = "https://d3ia91dr6eizuz.cloudfront.net";
+    const imageTargetSrc = `${CLOUD_FRONT_URL}/targets/${contentId}.mind`;
+    const videoSrc = `${CLOUD_FRONT_URL}/videos/${contentId}.mp4`;
 
     const startMindAR = async () => {
         try {
